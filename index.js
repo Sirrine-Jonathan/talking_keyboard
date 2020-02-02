@@ -1,84 +1,35 @@
-const say = require('say');
 const readline = require('readline');
+const sayKey = require('./sayKey');
+const playSound = require('./playSound');
 readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true);
+
+class PlayType {
+	static KEYS = 'KEYS';
+	static MUSIC = 'MUSIC';
+
+	constructor(current = PlayType.KEYS){
+		this.current = current;
+	}
+
+	toggleType = () => {
+		if (this.current === PlayType.KEYS){
+			this.current = PlayType.MUSIC;
+		} else if (this.current === PlayType.MUSIC){
+			this.current = PlayType.KEYS;
+		}
+	}
+}
+let playType = new PlayType();
+if (process.env.DEV_MODE) console.log('DEV MODE');
+
 process.stdin.on('keypress', (str, key) => {
-	//if (key.sequence == '\u0003') process.exit();
-	sayKey(key);
+	if (key.sequence == '\u0003' && process.env.DEV_MODE) process.exit();
+	if (key.sequence === '\u001b[G' || key.name === 'undefined') playType.toggleType(); 
+	if (playType.current === PlayType.KEYS)
+		sayKey(key);
+	else if (playType.current === PlayType.MUSIC)
+		playSound(key);
 });	
-const sayKey = (key) => {
-	let text = ""
-	if (key.name && !override.find((name) => name === key.name)){
-		text = key.name;
-	} else if (convert[key.sequence]){
-		text = convert[key.sequence];
-	} else if (convert[key.name]){
-		text = convert[key.name];
-	} else {
-		text = "Unknown Key";
-	}
 
 
-	// prepend shift
-	if (capitals.split('').find((letter) => letter == key.sequence)){
-		text = "Captial " + text;
-	} else if (key.shift){
-		text = "Shift " + text;
-	} 
-
-	// prepend alt 
-	if (key.meta){
-		text = "Alt " + text;
-	}
-
-	// prepend ctrl
-	if (key.ctrl){
-		text = "Control " + text;
-	}
-
-	say.speak(text);
-}
-
-const capitals = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-const override = [
-	'pageup',
-	'space'
-];
-
-const convert = {
-	'`': 'Back tick',
-	'~': 'Tilde',
-	'!': 'Exclamation Point',
-	'@': 'At Symbol',
-	'#': 'Pound',
-	'$': 'Dollar Sign',
-	'%': 'Percent Sign',
-	'^': 'caret', 
-	'&': 'Ampersand',
-	'*': 'Asterisk',
-	'(': 'Open Parenthesis',
-	')': 'Close Parenthesis',
-	'-': 'Minus',
-	'_': 'Underscore',
-	'+': 'Plus',
-	'=': 'Equals',
-	'\\': 'Back Slash',
-	'/': 'Forward Slash',
-	'|': 'Pipe',
-	'[': 'Open Bracket',
-	']': 'Close Bracket',
-	'{': 'Open Brace',
-	'}': 'Close Brace',
-	"'": 'Apostrophe',
-	'"': 'Quotation Marks',
-	':': 'Colon',
-	';': 'Semi-colon',
-	'?': 'Question Mark',
-	'.': 'Period',
-	'>': 'Greater Than',
-	'<': 'Less Than',
-	',': 'comma',
-	'pageup': 'page up',
-	'space': 'Space Bar',
-}

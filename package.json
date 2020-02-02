@@ -1,16 +1,21 @@
 {
-  "name": "talking_keyboard",
-  "version": "1.0.0",
-  "description": "Reads Keyboard input and says name of key through standard audio out",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "author": "Jonathan Sirrine",
-  "license": "ISC",
-  "dependencies": {
-    "keypress": "^0.2.1",
-    "say": "^0.16.0"
-  }
+	"name": "talking_keyboard",
+	"version": "1.0.0",
+	"description": "Reads Keyboard input and says name of key through standard audio out",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Sirrine-Jonathan/talking_keyboard.git"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js",
+		"dev": "set DEV_MODE=true && node index.js"
+	},
+	"author": "Jonathan Sirrine",
+	"license": "ISC",
+	"dependencies": {
+		"keypress": "^0.2.1",
+		"say": "^0.16.0"
+	}
 }
